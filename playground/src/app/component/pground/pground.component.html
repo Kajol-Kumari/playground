@@ -1,0 +1,219 @@
+<!-- toast -->
+<!-- <p-toast></p-toast> -->
+
+<!-- scroll-to-top -->
+<p-scrollTop></p-scrollTop>
+
+
+<p-scrollPanel>
+  <span class="heading">
+    {{'Welcome To The Playground' | translate}}! <br />
+    😃 😄 😁
+  </span>
+  <span class="btn">
+    <a routerLink="/">
+      <button pButton pRipple type="button" label="{{'Go Back Home' | translate}}" icon="pi pi-arrow-left" class="p-button-raised p-button-warning"></button>
+    </a>
+  </span>
+
+  <!-- ------------------------POC ------------------------ -->
+  <!-- [lazy]="true" -->
+  <p-card class="data-table" *ngIf="data">
+    <p-table #dt [value]="displayData" (onLazyLoad)="loadDataLazily($event)" [globalFilterFields]="['name', 'description']" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[4,6,8,10]"  [totalRecords]="data.length" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Results: {first} - {last} / {totalRecords}">
+      <ng-template pTemplate="caption" class="caption">
+        <h2>👻 {{'Play with Data' | translate}} 👻 </h2> <br />
+        <button pButton pRipple type="button" label="{{ 'Add New Item' | translate}}!" icon="pi pi-plus" (click)="openModal()" class="p-button-raised p-button-success"></button>
+        &nbsp; &nbsp;
+        <span class="p-input-icon-left p-ml-auto search-table">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search keyword" />
+        </span>
+        <br /> <br />
+        <select #langSelect (change)="changeLang(langSelect.value)">
+          <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
+        </select>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th [pSortableColumn]="'name'">
+            <p-sortIcon [field]="'name'" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            {{ 'Name'| translate}}
+          </th>
+          <th [pSortableColumn]="'description'" >
+            <p-sortIcon [field]="'description'" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            {{ 'Description' | translate}}
+          </th>
+          <th style="color: brown; font-weight: bold;" [pSortableColumn]="'active'">
+            <p-sortIcon [field]="'active'" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            {{ 'Active' | translate}}
+          </th>
+          <th >{{ 'Actions' | translate}}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-data let-i="rowIndex+1">
+        <tr>
+          <td>{{i}} &nbsp; &nbsp; {{data.name | translate}}</td>
+          <td>{{data.description | translate}}</td>
+          <td class="active-icon">
+            <i class="pi pi-check" *ngIf="data.active"></i>
+            <i class="pi pi-times" *ngIf="!(data.active)"></i>
+          </td>
+          <td class="action-btn"><span (click)="openEditModal(data)">{{ 'Edit' | translate}}</span>&nbsp; <span
+              (click)="DeleteItem(data._id)">{{ 'Delete' | translate}}</span></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+
+  <!-- Edit item details modal -->
+  <p-dialog header="{{editModalTitle}}" [(visible)]="editModalDisplay">
+    <form #editItemForm="ngForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="name">Name</label>
+          <br /><input id="name" name="name" type="text" pInputText [(ngModel)]="editName">
+        </div>
+        <div class="p-field">
+          <br /><label for="description">Description</label> <br />
+          <input id="description" name="description" type="text" pInputText [(ngModel)]="editDescription">
+        </div>
+      </div><br />
+      Active: <br /><br />
+      <div class="p-formgroup-inline">
+        <div class="p-field-radiobutton">
+          <p-radioButton name="yes" value="yes" [(ngModel)]="editActive" inputId="yes"></p-radioButton>&nbsp;
+          <label for="yes">Yes</label> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          <p-radioButton name="no" value="no" [(ngModel)]="editActive" inputId="no"></p-radioButton>&nbsp;
+          <label for="no">No</label>
+        </div>
+      </div><br />
+      <span class="submit-btn">
+        <button pButton pRipple type="button" label="Submit" (click)="EditItemDetail()"></button>
+      </span>
+    </form>
+  </p-dialog>
+
+
+  <!-- Add new item modal -->
+  <p-dialog header="{{modalTitle}}" [(visible)]="modalDisplay">
+    <form #addItemForm="ngForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="name">Name</label>
+          <br /><input id="name" name="name" type="text" pInputText ngModel>
+        </div>
+        <div class="p-field">
+          <br /><label for="description">Description</label> <br />
+          <input id="description" name="description" type="text" pInputText ngModel>
+        </div>
+      </div><br />
+      Active: <br /><br />
+      <div class="p-formgroup-inline">
+        <div class="p-field-radiobutton">
+          <p-radioButton name="yes" value="yes" [(ngModel)]="activeYes" inputId="yes"></p-radioButton>&nbsp;
+          <label for="yes">Yes</label> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          <p-radioButton name="no" value="no" [(ngModel)]="activeNo" inputId="no"></p-radioButton>&nbsp;
+          <label for="no">No</label>
+        </div>
+      </div><br />
+      <span class="submit-btn">
+        <button pButton pRipple type="button" label="Submit" (click)="AddNewItem(addItemForm)"></button>
+      </span>
+    </form>
+  </p-dialog>
+
+
+
+  <!-- ------------------------POC END------------------------ -->
+
+  <!-- Gallery Playground -->
+<span class="carousel-card">
+  <span class="heading">
+    Welcome To The Gallery Playground! <br />
+  </span>
+  <p-galleria [(value)]="images" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '640px', 'margin-left': '25%'}" [numVisible]="5" [circular]="true"
+          [autoPlay]="true" [transitionInterval]="2000">
+          <ng-template pTemplate="item" let-item>
+              <img [src]="item.previewImageSrc" style="width: 100%; display: block;" />
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+              <div class="p-grid p-nogutter p-justify-center">
+                  <img [src]="item.thumbnailImageSrc" style="display: block; height: 200px;" />
+              </div>
+          </ng-template>
+  </p-galleria>
+</span>
+
+
+<!-- Tranisition using RXJS -->
+<span class="rxjs-container">
+  <span class="heading">
+    Welcome To The RxJS Playground! <br />
+  </span>
+
+  <button pButton pRipple type="button" label="Play With RxJs!" icon="pi pi-play" (click)="playRxjs()" class="p-button-raised p-button-success"></button>
+  <br /> <br />
+  <div id="content">
+  </div>
+
+</span>
+
+
+
+  <!-- table playground -->
+  <p-card class="data-table" *ngIf="data">
+    <p-table #dt1 [value]="data" [paginator]="true" [rows]="2" [showCurrentPageReport]="true" [totalRecords]="data.length"
+      [rowsPerPageOptions]="[1,2,3,4]" [globalFilterFields]="['name', 'description']">
+      <ng-template pTemplate="caption" class="caption">
+        Users List
+        <div class="search-box">
+          <span class="p-input-icon-right p-ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search keyword" />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-data>
+        <tr>
+          <td>{{data._id}}</td>
+          <td>{{data.name}}</td>
+          <td>{{data.description}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Carousel Playground -->
+  <span class="carousel-card">
+    <span class="heading">
+      Welcome To The Carousel Playground! <br />
+    </span>
+    <p-carousel [value]="data" [autoplayInterval]="3000" [circular]="false" [numVisible]="2" [numScroll]="1">
+      <ng-template let-data pTemplate="item">
+        <p-card>
+          <p-header>
+            {{data.name}}
+          </p-header>
+          {{data.description}}
+        </p-card>
+      </ng-template>
+    </p-carousel>
+  </span>
+</p-scrollPanel>
+
+

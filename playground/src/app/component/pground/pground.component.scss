@@ -1,0 +1,107 @@
+p-scrollPanel {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.heading {
+   text-align: center;
+   display: block;
+   font-size: 30px;
+   padding: 20px 8px 8px 8px;
+   font-weight: 600;
+}
+
+.btn {
+  text-align: center;
+  display: block;
+  padding: 20px 8px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.data-table {
+  text-align: center;
+  display: block;
+  padding: 8px;
+}
+
+.search-box {
+  padding: 20px 8px;
+}
+
+p-card{
+  margin: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.carousel-card, .rxjs-container {
+  padding: 80px 8px;
+}
+
+p-carousel p-card {
+  p-header {
+    margin: 8px 20px;
+    font-weight: bold;
+    font-size: 22px;
+  }
+}
+
+.active-icon {
+  .pi-check {
+    font-weight: bold;
+    color: rgb(6, 102, 6);
+  }
+
+  .pi-times {
+    font-weight: bold;
+    color: rgb(211, 9, 9);
+  }
+}
+
+::ng-deep .p-datatable .p-sortable-column .p-sortable-column-icon  {
+  color: rgb(0, 162, 255);
+}
+
+.action-btn {
+  span {
+    cursor: pointer;
+    color: rgb(0, 162, 255);
+  }
+}
+
+.submit-btn {
+  text-align: center;
+  display: block;
+}
+
+select {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-padding-end: 20px;
+  -moz-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -moz-padding-start: 2px;
+  background-color: #3f7994; /* Fallback color if gradients are not supported */
+  background-position: center right;
+  background-repeat: no-repeat;
+  border: 1px solid rgb(211, 231, 233);
+  border-radius: 2px;
+  box-shadow: 0px 1px 3px rgba(89, 120, 179, 0.1);
+  color: white;
+  font-size: inherit;
+  margin: 0;
+  overflow: hidden;
+  padding: 8px 54px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rxjs-container {
+  text-align: center;
+  display: block;
+  border: 8px solid rgb(126, 36, 36);
+  box-shadow: rgba(19, 101, 207, 0.4) 0px 0px 0px 2px, rgba(33, 99, 221, 0.65) 0px 4px 6px -1px, rgba(19, 125, 173, 0.08) 0px 1px 0px inset;
+}
